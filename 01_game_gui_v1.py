@@ -15,7 +15,7 @@ class StartGame:
         self.start_frame.grid()
 
         # strings for labels
-        intro_string = ("Welcome to Blackjack!")
+        intro_string = "Welcome to Blackjack!"
 
         bet_string = "How much do you want to bet?"
 
@@ -46,15 +46,15 @@ class StartGame:
         self.entry_area_frame = Frame(self.start_frame)
         self.entry_area_frame.grid(row=3)
 
-        # create round enter
+        # create bet entry
         self.bet_entry = Entry(self.entry_area_frame, font=("Arial", "28", "bold"), width=10)
-        self.bet_entry.grid(row=2, column=0, padx=10, pady=30)
+        self.bet_entry.grid(row=1, column=0, padx=10, pady=30)
 
         # create play button...
         self.play_button = Button(self.entry_area_frame, font=("Arial", "16", "bold"),
                                   fg="#FFFFFF", bg="#0057D8", text="Play",
                                   width=10, command=self.check_bet)
-        self.play_button.grid(row=4, column=0)
+        self.play_button.grid(row=2, column=0)
 
     def check_bet(self):
 
@@ -74,10 +74,8 @@ class StartGame:
                 # that when users play a new game, they don't see an error message
                 self.bet_entry.delete(0, END)
                 self.choose_label.config(text="How much would you like to bet?")
-                # invoke play class (and take across bet amount)
-                # PLACEHOLDER
-                # hide root window
-                root.withdraw()
+                # temporary success message
+                self.choose_label.config(text=f"you have chosen to bet ${bet_amount:.2f}")
             else:
                 has_errors = "yes"
 
