@@ -119,7 +119,7 @@ class Play:
         # list for buttons (frame | text | fg | bg | row | columm | width | command)
         control_button_list = [
             [self.button_frame, "Hit Me!", "#FDF4E9", "#981C1E", 0, 0, 10, self.player_hit],
-            [self.button_frame, "Stand", "#FDF4E9", "#040014", 0, 1, 10, None],
+            [self.button_frame, "Stand", "#FDF4E9", "#040014", 0, 1, 10, self.stand],
             [self.button_frame, "Help", "#FDF4E9", "#981C1E", 1, 0, 10, self.to_help],
             [self.button_frame, "Stats", "#FDF4E9", "#040014", 1, 1, 10, None]
         ]
@@ -314,6 +314,10 @@ class Play:
 
                 # display score
                 self.user_card_label.config(text=f"User Score: {sum(pscore)}")
+                if sum(pscore) > 21:
+                    end_window = Toplevel()  # Create a new window
+                    end_window.title("Game Over! You lost")
+                    end_window.geometry("250x150")
                 # put number of cards left in title bar
                 root.title(f"Blackjack game - {len(deck)} cards left")
             except:
@@ -329,12 +333,43 @@ class Play:
         player_card = int(player_card.split()[1])
         pscore.append(player_card)
 
-    def game_logic(self):
+    def stand(self):
         """
-        checks if scores are at/above 21
+        checks who won
         :return:
         """
-        pass
+        if sum(pscore) > 21:
+            end_window = Toplevel()  # Create a new window
+            end_window.title("Game Over! You lost")
+            end_window.geometry("250x150")
+            gamewon = False
+        elif sum(dscore) > 21:
+            end_window = Toplevel()  # Create a new window
+            end_window.title("Game Over! You win")
+            end_window.geometry("250x150")
+            gamewon = True
+        elif sum(pscore) == 21 and sum(pscore) > sum(dscore):
+            end_window = Toplevel()  # Create a new window
+            end_window.title("Game Over! You win")
+            end_window.geometry("250x150")
+            gamewon = True
+        elif sum(pscore) > sum(dscore):
+            end_window = Toplevel()  # Create a new window
+            end_window.title("Game Over! You win")
+            end_window.geometry("250x150")
+            gamewon = True
+        elif sum(dscore) == 21:
+            end_window = Toplevel()  # Create a new window
+            end_window.title("Game Over! You lost")
+            end_window.geometry("250x150")
+            gamewon = False
+        else:
+            end_window = Toplevel()  # Create a new window
+            end_window.title("Game Over! You lost")
+            end_window.geometry("250x150")
+            gamewon = False
+
+
 
     def to_help(self):
         """
@@ -401,10 +436,9 @@ class DisplayHelp:
         self.help_box.destroy()
 
 
-
-
 if __name__ == "__main__":
     root = Tk()
     root.title("Black Jack")
     StartGame()
     root.mainloop()
+
