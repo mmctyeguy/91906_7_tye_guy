@@ -134,8 +134,9 @@ class Play:
                                     width=10)
         self.hit_me_button.grid(row=0, column=0, padx=5, pady=5)
 
+        # make stand button (lambda to ensure command only occurs when button pressed)
         self.stand_button = Button(self.button_frame, text="Stand", fg="#FDF4E9", bg="#040014",
-                                   command=self.stand(current_bet), font=("Arial", "16", "bold"),
+                                   command=lambda: self.stand(current_bet), font=("Arial", "16", "bold"),
                                    width=10)
         self.stand_button.grid(row=0, column=1, padx=5, pady=5)
 
