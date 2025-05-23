@@ -2,6 +2,7 @@ from tkinter import *
 from functools import partial
 from PIL import Image, ImageTk
 import random
+from datetime import date
 
 
 class StartGame:
@@ -318,10 +319,9 @@ class Play:
 
                 # display score
                 self.user_card_label.config(text=f"User Score: {sum(pscore)}")
+                # invoke stand button if user goes bust
                 if sum(pscore) > 21:
-                    end_window = Toplevel()  # Create a new window
-                    end_window.title("Game Over! You lost")
-                    end_window.geometry("250x150")
+                    self.stand_button.invoke()
                 # put number of cards left in title bar
                 root.title(f"Blackjack game - {len(deck)} cards left")
             except:
@@ -342,7 +342,6 @@ class Play:
         checks who won
         :return:
         """
-
         if sum(pscore) > 21:
             gamewon = False
         elif sum(dscore) > 21:
@@ -359,6 +358,14 @@ class Play:
         self.end_game(gamewon, current_bet)
 
     def end_game(self, gamewon, current_bet):
+
+        # ***** get current date for heading and filename *****
+        today = date.today()
+
+        # get day, month, year as individual strings
+        day = today.strftime("%d")
+        month = today.strftime("%m")
+        year = today.strftime("%Y")
 
         # create end screen window
         end_window = Toplevel()
@@ -390,6 +397,19 @@ class Play:
         else:
             game_label.config(text="You lost...")
             bet_label.config(text=f"Your new balance is...-{current_bet}")
+
+        # write new balance to file
+        file_name = f"Game{year}_{month}_{day}"
+        write_to = f"{file_name}.txt"
+
+        with open(write_to, "w") as text_file:
+
+            text_file.write("**** Balance ****\n")
+            text_file.write(f"Date: {day}/{month}/{year}\n\n")
+            if gamewon is True:
+                text_file.write(f"Your new balance is...{current_bet}")
+            else:
+                text_file.write(f"Your new balance is...-{current_bet}")
 
 
 class DisplayHelp:
