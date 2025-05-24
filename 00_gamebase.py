@@ -14,13 +14,12 @@ class StartGame:
         """
         gets bet amount from user
         """
-
+        # create initial frame
         self.start_frame = Frame(padx=10, pady=10, bg="#042B01")
         self.start_frame.grid()
 
         # strings for labels
         intro_string = "Welcome to Blackjack!"
-
         bet_string = "How much do you want to bet?"
 
         # List of labels to be made (text | font | fg)
@@ -32,7 +31,6 @@ class StartGame:
         ]
 
         # Create labels and add them to reference list.
-
         start_label_ref = []
         for count, item in enumerate(start_labels_list):
             make_label = Label(self.start_frame, text=item[0], font=item[1],
@@ -42,15 +40,15 @@ class StartGame:
 
             start_label_ref.append(make_label)
 
-        # extract choice label so that it can be changed to an
+        # extract bet label so that it can be changed to an
         # error message if necessary.
-        self.choose_label = start_label_ref[2]
+        self.bet_label = start_label_ref[2]
 
         # Frame so that entry box and button can be in the same row
         self.entry_area_frame = Frame(self.start_frame, bg="#042B01")
         self.entry_area_frame.grid(row=3)
 
-        # create bet entry
+        # create bet entry area
         self.bet_entry = Entry(self.entry_area_frame, font=("Arial", "28", "bold"),
                                width=10, bg="#10460C", fg="#FDF4E9")
         self.bet_entry.grid(row=1, column=0, padx=10, pady=30)
@@ -61,29 +59,34 @@ class StartGame:
                                   width=10, command=self.check_bet)
         self.play_button.grid(row=2, column=0)
 
+        # create help button
         self.help_button = Button(self.entry_area_frame, text="Help",
                                   font=("Arial", "16", "bold"), fg="#FDF4E9", bg="#040014",
                                   width=10, command=self.to_help)
         self.help_button.grid(row=3, column=0, pady=10)
 
     def check_bet(self):
-
+        """
+        checks users bet is valid before starting the game
+        """
+        # get bet amount from user entry
         bet_amount = self.bet_entry.get()
 
-        self.choose_label.config(fg="#FDF4E9", font=("Arial", "12", "bold"))
+        # configure bet labels
+        self.bet_label.config(fg="#FDF4E9", font=("Arial", "12", "bold"))
         self.bet_entry.config(bg="#FDF4E9")
 
+        # strings for bet checking
         error = "Oops - Please choose a number between 1-10."
         has_errors = "no"
 
-        # checks that the bet amount is above 0 and below 10
+        # checks that the bet amount is above 0 and below 10 (allows decimals)
         try:
             bet_amount = float(bet_amount)
             if 0 < bet_amount <= 10:
-                # clear entry box and reset instruction label so
-                # that when users play a new game, they don't see an error message
+                # clear entry box and reset instruction label
                 self.bet_entry.delete(0, END)
-                self.choose_label.config(text="How much would you like to bet?")
+                self.bet_label.config(text="How much would you like to bet?")
                 # invoke play class and take across bet amount
                 Play(bet_amount)
                 # hide root window
@@ -96,8 +99,8 @@ class StartGame:
 
         # display error if necessary
         if has_errors == "yes":
-            self.choose_label.config(text=error, fg="#990000",
-                                     font=("Arial", "10", "bold"))
+            self.bet_label.config(text=error, fg="#F4CCCC",
+                                  font=("Arial", "10", "bold"))
             self.bet_entry.config(bg="#F4CCCC", fg="#040014")
             self.bet_entry.delete(0, END)
 
@@ -142,34 +145,34 @@ class Play:
         self.stand_button.grid(row=0, column=1, padx=5, pady=5)
 
         # create frames for cards
-        self.dealer_frame = LabelFrame(self.game_frame, borderwidth=0)
+        self.dealer_frame = LabelFrame(self.game_frame, borderwidth=0, bg="#042B01")
         self.dealer_frame.grid(row=2, padx=20, ipadx=20)
 
-        self.player_frame = LabelFrame(self.game_frame, borderwidth=0)
+        self.player_frame = LabelFrame(self.game_frame, borderwidth=0, bg="#042B01")
         self.player_frame.grid(row=3, ipadx=20, pady=10)
 
         # put dealer cards in frames
-        self.dealer_label_1 = Label(self.dealer_frame, text="")
+        self.dealer_label_1 = Label(self.dealer_frame, text="", bg="#042B01")
         self.dealer_label_1.grid(row=0, column=0, padx=20)
 
-        self.dealer_label_2 = Label(self.dealer_frame, text="")
+        self.dealer_label_2 = Label(self.dealer_frame, text="", bg="#042B01")
         self.dealer_label_2.grid(row=0, column=1, padx=20)
 
         # put player cards in frames
-        self.player_label_1 = Label(self.player_frame, text="")
+        self.player_label_1 = Label(self.player_frame, text="", bg="#042B01")
         self.player_label_1.grid(row=1, column=0, padx=20)
 
-        self.player_label_2 = Label(self.player_frame, text="")
+        self.player_label_2 = Label(self.player_frame, text="", bg="#042B01")
         self.player_label_2.grid(row=1, column=1, padx=20)
 
-        self.player_label_3 = Label(self.player_frame, text="")
-        self.player_label_3.grid(row=1, column=2, padx=20)
+        self.player_label_3 = Label(self.player_frame, text="", bg="#042B01")
+        self.player_label_3.grid(row=1, column=2, padx=0)
 
-        self.player_label_4 = Label(self.player_frame, text="")
-        self.player_label_4.grid(row=1, column=3, padx=20)
+        self.player_label_4 = Label(self.player_frame, text="", bg="#042B01")
+        self.player_label_4.grid(row=1, column=3, padx=0)
 
-        self.player_label_5 = Label(self.player_frame, text="")
-        self.player_label_5.grid(row=1, column=4, padx=20)
+        self.player_label_5 = Label(self.player_frame, text="", bg="#042B01")
+        self.player_label_5.grid(row=1, column=4, padx=0)
 
         # labels for score displays
         self.opp_card_label = Label(self.game_frame, text="Opponent Cards",
@@ -183,9 +186,11 @@ class Play:
         # call to deal initial cards
         self.shuffle()
 
-    # shuffle the cards
     def shuffle(self):
-        # Clear all the old cards from previous games
+        """
+        initial dealing funtcion for the cards
+        """
+        # Clear all the labels
         self.dealer_label_1.config(image="")
         self.dealer_label_2.config(image="")
 
@@ -199,6 +204,7 @@ class Play:
         suits = ["diamond", "clubs", "hearts", "spades"]
         values = range(1, 14)
 
+        # make deck and create values
         global deck
         deck = []
 
@@ -221,8 +227,10 @@ class Play:
         self.player_hit()
         self.player_hit()
 
-    # Resize the cards
     def resize_cards(self, card):
+        """
+        resizes the images
+        """
         # open image
         our_card_img = Image.open(card)
 
@@ -237,6 +245,10 @@ class Play:
         return our_card_image
 
     def dealer_hit(self):
+        """
+        dealing function for the opponent
+        :return:
+        """
         global dealer_spot
         if dealer_spot < 3:
             try:
@@ -252,7 +264,8 @@ class Play:
 
                 # resize and set cards in labels
                 if dealer_spot == 0:
-                    dealer_image1 = self.resize_cards(f'cos_images/{dealer_card}.png')
+                    # first card gets displayed as a blank card (stops user from seeing true value)
+                    dealer_image1 = self.resize_cards(f'cos_images/Back Blue 1.png')
                     self.dealer_label_1.config(image=dealer_image1)
                     # increment dealer spot counter
                     self.dealer_score(dealer_card)
@@ -264,14 +277,18 @@ class Play:
                     self.dealer_score(dealer_card)
                     dealer_spot += 1
 
-                # TEMPORARY DISPLAY
-                self.opp_card_label.config(text=f"Opponent Score: {sum(dscore)}")
+                # displays value of card that is known to user
+                self.opp_card_label.config(text=f"Opponent Score: ?? + {int(dscore[1])}")
                 # put number of cards left in title bar
                 root.title(f"Blackjack game - {len(deck)} cards left")
             except:
                 root.title(f"Blackjack - No cards in deck")
 
     def player_hit(self):
+        """
+        dealing function for the user
+        :return:
+        """
         global player_spot
         if player_spot < 5 and sum(pscore) < 21:
             try:
@@ -301,21 +318,28 @@ class Play:
                 elif player_spot == 2:
                     player_image3 = self.resize_cards(f'cos_images/{player_card}.png')
                     self.player_label_3.config(image=player_image3)
+                    self.player_label_3.grid_configure(padx=20)
                     # increment player spot counter
                     self.player_score(player_card)
                     player_spot += 1
                 elif player_spot == 3:
                     player_image4 = self.resize_cards(f'cos_images/{player_card}.png')
                     self.player_label_4.config(image=player_image4)
+                    self.player_label_4.grid_configure(padx=20)
                     # increment player spot counter
                     self.player_score(player_card)
                     player_spot += 1
                 elif player_spot == 4:
                     player_image5 = self.resize_cards(f'cos_images/{player_card}.png')
                     self.player_label_5.config(image=player_image5)
+                    self.player_label_5.grid_configure(padx=20)
                     # increment player spot counter
                     self.player_score(player_card)
                     player_spot += 1
+                else:
+                    # if user has max amount of cards and presses "hit me" button
+                    # invoke stand button to finish game
+                    self.stand_button.invoke()
 
                 # display score
                 self.user_card_label.config(text=f"User Score: {sum(pscore)}")
@@ -328,38 +352,53 @@ class Play:
                 root.title(f"Blackjack - No cards in deck")
 
     def dealer_score(self, dealer_card):
+        """
+        gets opponent's score and appends it to global list
+        """
         # split out card values
         dealer_card = int(dealer_card.split()[1])
+        # append value to dscore list
         dscore.append(dealer_card)
 
     def player_score(self, player_card):
+        """
+        gets user's score and appends it to global list
+        """
         # split out card values
         player_card = int(player_card.split()[1])
+        # append value to pscore list
         pscore.append(player_card)
 
     def stand(self, current_bet):
         """
-        checks who won
+        checks who won and passes result to end_game function
         :return:
         """
+
         if sum(pscore) > 21:
-            gamewon = False
+            game_won = False
         elif sum(dscore) > 21:
-            gamewon = True
+            game_won = True
         elif sum(pscore) == 21 and sum(pscore) > sum(dscore):
-            gamewon = True
+            game_won = True
         elif sum(pscore) > sum(dscore):
-            gamewon = True
+            game_won = True
         elif sum(dscore) == 21:
-            gamewon = False
+            game_won = False
         else:
-            gamewon = False
+            game_won = False
 
-        self.end_game(gamewon, current_bet)
+        self.end_game(game_won, current_bet)
 
-    def end_game(self, gamewon, current_bet):
+    def end_game(self, game_won, current_bet):
+        """
+        opens endgame window, displays balance & game result
+        and writes new balance to file
+        """
+        # closes play window
+        self.play_box.destroy()
 
-        # ***** get current date for heading and filename *****
+        # get current date for heading and filename
         today = date.today()
 
         # get day, month, year as individual strings
@@ -370,7 +409,7 @@ class Play:
         # create end screen window
         end_window = Toplevel()
         end_window.title("Game Over!")
-        end_window.geometry("300x300")
+        end_window.geometry("310x300")
         end_window.config(bg="#042B01")
         end_window.grid()
 
@@ -387,11 +426,17 @@ class Play:
                           bg="#042B01", font=("Arial", "12"))
         bet_label.grid(row=3)
 
-        play_button = Button(end_frame, text="Play Again!", fg="#FDF4E9", font=("Arial", "12", "bold"), bg="#981C1E",
-                             width=10)
-        play_button.grid(row=4, pady=100, ipadx=10, ipady=5)
+        end_label = Label(end_frame, text="Click the button below to close the game! \n"
+                                          "Your balance is written to a file.",
+                          fg="#FDF4E9", bg="#042B01", font=("Arial", "12"))
+        end_label.grid(row=4, pady=10)
 
-        if gamewon is True:
+        end_button = Button(end_frame, text="Thanks for playing!", fg="#FDF4E9", font=("Arial", "12", "bold"),
+                            bg="#981C1E", width=20, command=end_window.destroy)
+        end_button.grid(row=5, pady=50, ipadx=10, ipady=5)
+
+        # display game result and new balance onscreen
+        if game_won is True:
             game_label.config(text="You won!")
             bet_label.config(text=f"Your new balance is...{current_bet}")
         else:
@@ -406,13 +451,16 @@ class Play:
 
             text_file.write("**** Balance ****\n")
             text_file.write(f"Date: {day}/{month}/{year}\n\n")
-            if gamewon is True:
+            if game_won is True:
                 text_file.write(f"Your new balance is...{current_bet}")
             else:
                 text_file.write(f"Your new balance is...-{current_bet}")
 
 
 class DisplayHelp:
+    """
+    help component
+    """
 
     def __init__(self, partner):
         # setup dialogue box and bg colour
@@ -439,6 +487,9 @@ class DisplayHelp:
         help_text = "To win blackjack, you must get as close to 21 as " \
                     "possible without going over. You need to beat your " \
                     "opponent's score, but if they get 21, they win! " \
+                    "You will only be shown one of your opponent's cards. " \
+                    "Also, in this version, you may only have 5 cards. " \
+                    "Pressing the Hit me! button after 5 cards will end the game. " \
                     "Scoring: K = 13, Q = 12, J = 11, 10 = 10 etc... A = 1"
 
         self.help_text_label = Label(self.help_frame,
