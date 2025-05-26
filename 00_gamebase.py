@@ -337,19 +337,23 @@ class Play:
                     self.player_score(player_card)
                     player_spot += 1
                 else:
-                    # if user has max amount of cards and presses "hit me" button
                     # invoke stand button to finish game
                     self.stand_button.invoke()
 
                 # display score
                 self.user_card_label.config(text=f"User Score: {sum(pscore)}")
-                # invoke stand button if user goes bust
-                if sum(pscore) > 21:
+                # invoke stand button if user goes bust, but only if they have
+                # gained at least 1 card (prevents screen from immediately disappearing)
+                if (sum(pscore) > 21) and (player_spot > 2):
                     self.stand_button.invoke()
+
                 # put number of cards left in title bar
                 root.title(f"Blackjack game - {len(deck)} cards left")
             except:
                 root.title(f"Blackjack - No cards in deck")
+        else:
+            # invoke stand button to finish game
+            self.stand_button.invoke()
 
     def dealer_score(self, dealer_card):
         """
@@ -374,17 +378,13 @@ class Play:
         checks who won and passes result to end_game function
         :return:
         """
-
+        # loop for logic
         if sum(pscore) > 21:
             game_won = False
         elif sum(dscore) > 21:
             game_won = True
-        elif sum(pscore) == 21 and sum(pscore) > sum(dscore):
-            game_won = True
         elif sum(pscore) > sum(dscore):
             game_won = True
-        elif sum(dscore) == 21:
-            game_won = False
         else:
             game_won = False
 
@@ -435,13 +435,19 @@ class Play:
                             bg="#981C1E", width=20, command=end_window.destroy)
         end_button.grid(row=5, pady=50, ipadx=10, ipady=5)
 
-        # display game result and new balance onscreen
+        # define balance
+        balance = 0
+
+        # display game result and calculate balance
         if game_won is True:
             game_label.config(text="You won!")
-            bet_label.config(text=f"Your new balance is...{current_bet}")
+            balance += current_bet
         else:
             game_label.config(text="You lost...")
-            bet_label.config(text=f"Your new balance is...-{current_bet}")
+            balance -= current_bet
+
+        # display new balance
+        bet_label.config(text=f"Your new balance is...{balance}")
 
         # write new balance to file
         file_name = f"Game{year}_{month}_{day}"
@@ -451,10 +457,7 @@ class Play:
 
             text_file.write("**** Balance ****\n")
             text_file.write(f"Date: {day}/{month}/{year}\n\n")
-            if game_won is True:
-                text_file.write(f"Your new balance is...{current_bet}")
-            else:
-                text_file.write(f"Your new balance is...-{current_bet}")
+            text_file.write(f"Your new balance is...{balance}")
 
 
 class DisplayHelp:
